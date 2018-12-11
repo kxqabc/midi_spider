@@ -15,5 +15,6 @@ class MidiSpiderItem(scrapy.Item):
 
 
 class MidiItem(scrapy.Item):
-    name = scrapy.Field()
-    category = scrapy.Field()
+    file_urls = scrapy.Field()
+    file = scrapy.Field()
+    file_name = scrapy.Field()
