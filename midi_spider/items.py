@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 
 # Define here the models for your scraped items
 #
@@ -18,3 +19,6 @@ class MidiItem(scrapy.Item):
     file_urls = scrapy.Field()
     file = scrapy.Field()
     file_name = scrapy.Field()
+    artists = scrapy.Field()
+    category = scrapy.Field()
+    genre = scrapy.Field()

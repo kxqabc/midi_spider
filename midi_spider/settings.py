@@ -66,8 +66,9 @@ ROBOTSTXT_OBEY = True
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'midi_spider.pipelines.MidiPipeline': 1,
+   'midi_spider.pipelines.JsonPipeline': 2,
 }
-FILES_STORE = 'midi'
+FILES_STORE = 'midi_spider/midi'
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
