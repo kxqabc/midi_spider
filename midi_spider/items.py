@@ -18,7 +18,8 @@ class MidiSpiderItem(scrapy.Item):
 class MidiItem(scrapy.Item):
     file_urls = scrapy.Field()
     file = scrapy.Field()
+    song_name = scrapy.Field()
     file_name = scrapy.Field()
     artists = scrapy.Field()
-    category = scrapy.Field()
+    catelog = scrapy.Field()
     genre = scrapy.Field()

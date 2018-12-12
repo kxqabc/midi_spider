@@ -1,22 +1,24 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+import hashlib
 
 import scrapy
 
 from ..items import MidiItem
+from log import LOG_INFO, LOG_ERROR
 
 
 class MidiSpider(scrapy.Spider):
     name = "midi_spider"
     allowed_domains = ["freemidi.org"]
-    start_urls = ["https://freemidi.org/songtitle-%s-0" % e for e in ['0', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
-     'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']]
+    # start_urls = ["https://freemidi.org/songtitle-%s-0" % e for e in ['0', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+    #  'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']]
+    start_urls = ["https://freemidi.org/songtitle-0-0"]
 
     def parse(self, response):
         main_content = response.xpath("//body/div[@id='container']/div[@id='mainContent']")
-        category = str(main_content.xpath("./div[@class='main-content-header-div']/text()").extract_first()).strip()
-        category = category[-1]
-        # print "category" + category
+        catalog = str(main_content.xpath("./div[@class='main-content-header-div']/text()").extract_first()).strip()
+        catalog = catalog[-1]
         page_selector = main_content.xpath("./div[@class='header-nav-pages-container']")
         current_page = int(page_selector.xpath("./span[@class='current']/text()").extract_first()) - 1
         # print "current page: %s" % str(current_page)
@@ -30,7 +32,7 @@ class MidiSpider(scrapy.Spider):
             href = song_sel.xpath("./div[@class='row-title']/a/@href").extract_first()
             song_url = response.urljoin(href)
             print "song url: %s" % str(song_url)
-            yield scrapy.Request(song_url, callback=self.parse_song, meta={'category': category})
+            yield scrapy.Request(song_url, callback=self.parse_song, meta={'catalog': catalog})
 
         next_page = current_page + 1
         if next_page <= last_page:
@@ -41,7 +43,7 @@ class MidiSpider(scrapy.Spider):
             yield scrapy.Request(next_page_url, callback=self.parse)
 
     def parse_song(self, response):
-        category = response.meta['category']
+        category = response.meta['catalog']
         content = response.xpath("//body/"
                                   "div[@id='container']/"
                                   "div[@id='mainContent']/"
@@ -74,3 +76,19 @@ class MidiSpider(scrapy.Spider):
         # print "song info: %s" % (midi_item['category'] + '_' + midi_item['file_name'])
         midi_item['file_urls'] = [url]
         return midi_item
+    
+    def set_midi_item(self, song_info_sel, genre_sel):
+        if not song_info_sel or not genre_sel:
+            return None
+        midi_item  = MidiItem()
+
+
+
+
+    def add_filename_with_md5(self, midi_item):
+        md5 = hashlib.md5()
+        midi_info = '|'.join((midi_item['song_name'], midi_item['artists'], midi_item['genre'], midi_item['file_urls'][0]))
+        md5.update(midi_info)
+        md5_str = md5.hexdigest()
+        midi_item['filename'] = "-".join((midi_item['song_name'], md5_str))
+

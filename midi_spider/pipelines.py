@@ -38,11 +38,8 @@ class MidiPipeline(FilesPipeline):
 class JsonPipeline(object):
 
     def process_item(self, item, spider):
-        # base_path = os.path.dirname(os.path.abspath('.'))
-        # file_name = base_path + '/' + str(item['category']) + '/' + str(item['file_name']) + '.json'
         base_path = os.path.abspath(os.path.dirname(__file__))
         file_name = item['file_name'] + '.json'
-        # file_path = str(base_path) + '/midi/' + file_name
         file_path = os.sep.join((str(base_path), STORE_PATH_PREFIX, item['category'], 'json'))
         file_name = os.sep.join((file_path, file_name))
         if not os.path.exists(file_path):
