@@ -17,7 +17,7 @@ class MidiSpider(scrapy.Spider):
     allowed_domains = ["freemidi.org"]
     # start_urls = ["https://freemidi.org/songtitle-%s-0" % e for e in ['0', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
     #  'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']]
-    start_urls = ["https://freemidi.org/songtitle-a-0"]
+    start_urls = ["https://freemidi.org/songtitle-x-0"]
 
     def parse(self, response):
         print "response url: %s" % str(response.url)
@@ -28,7 +28,8 @@ class MidiSpider(scrapy.Spider):
         # parse current page num and last page num in this page
         page_selector = main_content.xpath("./div[@class='header-nav-pages-container']")
         current_page = int(page_selector.xpath("./span[@class='current']/text()").extract_first()) - 1
-        last_page = int(page_selector.xpath("./a[last()]/text()").extract_first())
+	last_page_str = page_selector.xpath("./a[last()]/text()").extract_first()
+        last_page = int(last_page_str) if last_page_str else 1
         # download midi and song's info
         song_selectors = main_content.xpath("./div[@class='song-list-container']")
         print "len of songs: %d" % len(song_selectors)
