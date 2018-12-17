@@ -28,7 +28,7 @@ class MidiSpider(scrapy.Spider):
         # parse current page num and last page num in this page
         page_selector = main_content.xpath("./div[@class='header-nav-pages-container']")
         current_page = int(page_selector.xpath("./span[@class='current']/text()").extract_first()) - 1
-	    last_page_str = page_selector.xpath("./a[last()]/text()").extract_first()
+        last_page_str = page_selector.xpath("./a[last()]/text()").extract_first()
         last_page = int(last_page_str) if last_page_str else 1
         # download midi and song's info
         song_selectors = main_content.xpath("./div[@class='song-list-container']")

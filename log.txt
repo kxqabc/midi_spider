@@ -1,0 +1,1 @@
+17 Dec 20:20:56 midi_spider.py set_midi_item [line:112] ERROR the midi's category is invalid, midi_url: https://freemidi.org/getter-1730
