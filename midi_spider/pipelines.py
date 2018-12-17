@@ -22,6 +22,10 @@ class MidiPipeline(FilesPipeline):
     def file_path(self, request, response=None, info=None):
         item = request.meta['item']
         file_name = item['file_name']
+        # replace os.sep by "-" if exist
+        has_sep = file_name.find(os.sep)
+        if has_sep != -1:
+            file_name = file_name.replace(os.sep, "-")
         category = item['category']
         return "/%s/%s.mid" % (category, file_name)
 
